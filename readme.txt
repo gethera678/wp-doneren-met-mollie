@@ -60,6 +60,8 @@ Yes! The following shortcodes are available:
 == Changelog ==
 
 = 2.9.0 - 23/11/2021 =
+* Fixed currency symbol when donor choose other currency
+* Changed input type to number instead of text for own amount field
 * Tested up to Wordpress 5.8.2
 * Minimum Wordpress version is now set to 5.3
 
