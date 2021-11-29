@@ -794,10 +794,10 @@ class Dmm_Start
 
                         if (get_option('dmm_free_input')) {
                             echo '<span style="display:block;overflow:auto;">
-                                  <input type="number" step="any" min="' . (get_option('dmm_minimum_amount') ?: 1) . '" id="dmm_amount" name="dmm_amount" class="' .
+                                  <input type="number" step="any" min="' . (str_replace(',', '.', esc_attr(get_option('dmm_minimum_amount'))) ?: 1) . '" id="dmm_amount" name="dmm_amount" class="' .
                                  esc_attr(get_option('dmm_fields_cls')) . '" value="' .
                                  esc_attr(isset($_POST["dmm_amount"]) ? $_POST["dmm_amount"] :
-                                         get_option('dmm_default_amount')) .
+                                         str_replace(',', '.', get_option('dmm_default_amount'))) .
                                  '" style="width: 100%;float:left;"></span>';
                         } else {
                             echo '<input type="hidden" name="dmm_currency" id="dmm_currency" value="' .
