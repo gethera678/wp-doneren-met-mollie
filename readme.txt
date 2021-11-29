@@ -1,5 +1,6 @@
 === Plugin Name ===
 Contributors: ndijkstra
+Donate link: https://wobbie.nl/doneren
 Tags: mollie,doneren,donate,ideal,mistercash,bancontact,creditcard,paypal,sofort,belfius,overboeking,recurring,incasso,debit,herhaalbetalingen,sepa,subscriptions,kbc,cbc,multicurrency,usd,gbp,dollar,pound
 Requires at least: 5.3
 Tested up to: 5.8.2

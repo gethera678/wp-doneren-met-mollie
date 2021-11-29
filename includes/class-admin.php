@@ -49,7 +49,8 @@ class Dmm_Admin {
         {
             $row_meta = array(
                 'support'    => '<a href="https://support.wobbie.nl" target="_blank">' . esc_html__('Support', 'mollie-forms') . '</a>',
-                'feature-requests'    => '<a href="https://features.wobbie.nl/b/doneren-met-mollie/" target="_blank">' . esc_html__('Feature requests', 'mollie-forms') . '</a>'
+                'feature-requests'    => '<a href="https://features.wobbie.nl" target="_blank">' . esc_html__('Feature requests', 'mollie-forms') . '</a>',
+                'donate'    => '<a href="https://wobbie.nl/doneren" target="_blank">' . esc_html__('Donate', 'mollie-forms') . '</a>'
             );
 
             return array_merge($links, $row_meta);
@@ -541,7 +542,8 @@ class Dmm_Admin {
                 <a href="?page=<?php echo DMM_PAGE_SETTINGS ?>&tab=form" class="nav-tab<?php echo $tab === 'form' ? ' nav-tab-active' : '';?>"><?php esc_html_e('Form', 'doneren-met-mollie');?></a>
                 <a href="?page=<?php echo DMM_PAGE_SETTINGS ?>&tab=mollie" class="nav-tab<?php echo $tab === 'mollie' ? ' nav-tab-active' : '';?>"><?php esc_html_e('Mollie settings', 'doneren-met-mollie');?></a>
                 <a href="?page=<?php echo DMM_PAGE_SETTINGS ?>&tab=recurring" class="nav-tab<?php echo $tab === 'recurring' ? ' nav-tab-active' : '';?>"><?php esc_html_e('Recurring payments', 'doneren-met-mollie');?></a>
-                <a href="https://features.wobbie.nl/b/doneren-met-mollie/" target="_blank" class="nav-tab" style="float: right"><?php esc_html_e('Feature Requests', 'doneren-met-mollie');?></a>
+                <a href="https://wobbie.nl/doneren" target="_blank" class="nav-tab" style="float: right"><?php esc_html_e('Donate', 'doneren-met-mollie');?></a>
+                <a href="https://features.wobbie.nl" target="_blank" class="nav-tab" style="float: right"><?php esc_html_e('Feature Requests', 'doneren-met-mollie');?></a>
                 <a href="https://support.wobbie.nl" target="_blank" class="nav-tab" style="float: right"><?php esc_html_e('Support', 'doneren-met-mollie');?></a>
             </h2>
             <?php
