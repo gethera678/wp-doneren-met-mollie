@@ -776,7 +776,7 @@ class Dmm_Start
                             if (get_option('dmm_free_input')) {
                                 echo '<select id="dmm_dd" style="width: 100%" class="' .
                                      esc_attr(get_option('dmm_fields_cls')) .
-                                     '" onchange="if(this.value!=\'--\'){document.getElementById(\'dmm_amount\').value=this.value;document.getElementById(\'dmm_amount\').style.display = \'none\';}else{document.getElementById(\'dmm_amount\').style.display = \'block\';}">';
+                                     '" onchange="if(this.value!=\'--\'){document.getElementById(\'dmm_amount\').value=this.value.replace(\',\', \'.\');document.getElementById(\'dmm_amount\').style.display = \'none\';}else{document.getElementById(\'dmm_amount\').style.display = \'block\';}">';
                                 echo '<option value="--">' . esc_html__('Enter your own amount', 'doneren-met-mollie') .
                                      '</option>';
                             } else {
@@ -794,7 +794,7 @@ class Dmm_Start
 
                         if (get_option('dmm_free_input')) {
                             echo '<span style="display:block;overflow:auto;">
-                                  <input type="number" min="' . (get_option('dmm_minimum_amount') ?: 1) . '" id="dmm_amount" name="dmm_amount" class="' .
+                                  <input type="number" step="any" min="' . (get_option('dmm_minimum_amount') ?: 1) . '" id="dmm_amount" name="dmm_amount" class="' .
                                  esc_attr(get_option('dmm_fields_cls')) . '" value="' .
                                  esc_attr(isset($_POST["dmm_amount"]) ? $_POST["dmm_amount"] :
                                          get_option('dmm_default_amount')) .
