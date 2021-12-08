@@ -426,6 +426,29 @@ class Dmm_Start
                         ];
                     }
 
+                    $secret   = uniqid();
+                    $customer = $mollie->post('customers', [
+                            "name"  => isset($_POST['dmm_name']) ? sanitize_text_field($_POST['dmm_name']) : '',
+                            "email" => isset($_POST['dmm_email']) ? sanitize_email($_POST['dmm_email']) : '',
+                    ]);
+
+                    do_action('dmm_customer_created', $customer);
+
+                    $this->wpdb->query($this->wpdb->prepare("INSERT INTO " . DMM_TABLE_DONORS . "
+                    ( customer_id, customer_mode, customer_name, customer_email, sub_interval, sub_currency, sub_amount, sub_description, customer_locale, secret )
+                    VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )",
+                            $customer->id,
+                            $customer->mode,
+                            $customer->name,
+                            $customer->email,
+                            sanitize_text_field($_POST['dmm_recurring_interval']),
+                            sanitize_text_field($_POST['dmm_currency']),
+                            $amount,
+                            $description,
+                            $customer->locale,
+                            $secret
+                    ));
+
                     if ($_POST['dmm_recurring_interval'] == 'one') {
                         // One-time donation
                         $payment = $mollie->post('payments', [
@@ -438,31 +461,9 @@ class Dmm_Start
                                 "webhookUrl"  => $dmm_webhook,
                                 "method"      => esc_html($_POST['dmm_method']) ?: null,
                                 "metadata"    => $metadata,
+                                'customerId'  => $customer->id,
                         ]);
                     } else {
-                        $secret   = uniqid();
-                        $customer = $mollie->post('customers', [
-                                "name"  => isset($_POST['dmm_name']) ? sanitize_text_field($_POST['dmm_name']) : '',
-                                "email" => isset($_POST['dmm_email']) ? sanitize_email($_POST['dmm_email']) : '',
-                        ]);
-
-                        do_action('dmm_customer_created', $customer);
-
-                        $this->wpdb->query($this->wpdb->prepare("INSERT INTO " . DMM_TABLE_DONORS . "
-                    ( customer_id, customer_mode, customer_name, customer_email, sub_interval, sub_currency, sub_amount, sub_description, customer_locale, secret )
-                    VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )",
-                                $customer->id,
-                                $customer->mode,
-                                $customer->name,
-                                $customer->email,
-                                sanitize_text_field($_POST['dmm_recurring_interval']),
-                                sanitize_text_field($_POST['dmm_currency']),
-                                $amount,
-                                $description,
-                                $customer->locale,
-                                $secret
-                        ));
-
                         $payment = $mollie->post('payments', [
                                 "amount"       => [
                                         "currency" => sanitize_text_field($_POST['dmm_currency']),
@@ -477,14 +478,14 @@ class Dmm_Start
                                 "method"       => sanitize_text_field($_POST['dmm_method']),
                                 "metadata"     => $metadata,
                         ]);
-
-                        $this->wpdb->query($this->wpdb->prepare("UPDATE " . DMM_TABLE_DONORS .
-                                                                " SET sub_settlement_currency = %s, sub_settlement_amount = %s WHERE secret = %s",
-                                $payment->settlementAmount->currency,
-                                $payment->settlementAmount->value,
-                                $secret
-                        ));
                     }
+
+                    $this->wpdb->query($this->wpdb->prepare("UPDATE " . DMM_TABLE_DONORS .
+                                                            " SET sub_settlement_currency = %s, sub_settlement_amount = %s WHERE secret = %s",
+                            $payment->settlementAmount->currency,
+                            $payment->settlementAmount->value,
+                            $secret
+                    ));
 
                     do_action('dmm_payment_created', $payment);
 
@@ -814,7 +815,7 @@ class Dmm_Start
                             var dmm_dd = document.getElementById('dmm_dd');
                             if (dmm_dd !== null) {
                                 if (dmm_dd.value !== '--') {
-                                    document.getElementById('dmm_amount').value = document.getElementById('dmm_dd').value;
+                                    document.getElementById('dmm_amount').value = document.getElementById('dmm_dd').value.replace(',', '.');
                                     document.getElementById('dmm_amount').style.display = 'none';
                                 }
                             }

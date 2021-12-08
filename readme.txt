@@ -4,7 +4,7 @@ Donate link: https://wobbie.nl/doneren
 Tags: mollie,doneren,donate,ideal,mistercash,bancontact,creditcard,paypal,sofort,belfius,overboeking,recurring,incasso,debit,herhaalbetalingen,sepa,subscriptions,kbc,cbc,multicurrency,usd,gbp,dollar,pound
 Requires at least: 5.3
 Tested up to: 5.8.2
-Stable tag: 2.9.2
+Stable tag: 2.9.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,10 @@ Yes! The following shortcodes are available:
 1. You can also use the optional shortcode [doneren_met_mollie_total] to show the total raised money
 
 == Changelog ==
+
+= 2.9.3 - 08/12/2021 =
+* Also creating customers/donors for one-time payments
+* Fixed another issue with amounts with comma for default amount
 
 = 2.9.2 - 29/11/2021 =
 * Fixed issue with amounts with comma for default amount
