@@ -486,19 +486,31 @@ class Dmm_Admin {
             try {
                 $cancelledSub = $mollie->delete('customers/' . $customer->customer_id . '/subscriptions/' . sanitize_text_field($_GET['subscription']));
             } catch (Exception $e) {
+				try {
+					$subscription = $mollie->get('customers/' . $customer->customer_id . '/subscriptions/' . sanitize_text_field($_GET['subscription']));
+
+					if ($subscription->status === 'canceled') {
+						$this->wpdb->query($this->wpdb->prepare("UPDATE " . DMM_TABLE_SUBSCRIPTIONS . " SET sub_status = %s WHERE subscription_id = %s",
+								$subscription->status,
+								$subscription->id
+						));
+						wp_redirect('?page=' . sanitize_text_field($_REQUEST['page']) . '&msg=cancel-ok');
+					}
+				} catch (Exception $e) { }
+
                 wp_redirect('?page=' . sanitize_text_field($_REQUEST['page']) . '&msg=cancel-nok&status=unknown');
+				return;
             }
 
-            if ($cancelledSub->status == 'canceled')
-            {
+            if ($cancelledSub->status === 'canceled') {
                 $this->wpdb->query($this->wpdb->prepare("UPDATE " . DMM_TABLE_SUBSCRIPTIONS . " SET sub_status = %s WHERE subscription_id = %s",
                     $cancelledSub->status,
                     $_GET['subscription']
                 ));
                 wp_redirect('?page=' . sanitize_text_field($_REQUEST['page']) . '&msg=cancel-ok');
+            } else  {
+	            wp_redirect('?page=' . sanitize_text_field($_REQUEST['page']) . '&msg=cancel-nok&status=' . $cancelledSub->status);
             }
-            else
-                wp_redirect('?page=' . sanitize_text_field($_REQUEST['page']) . '&msg=cancel-nok&status=' . $cancelledSub->status);
         }
 
         if (isset($_GET['msg']))

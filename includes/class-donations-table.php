@@ -152,8 +152,7 @@ class Dmm_List_Table extends WP_List_Table
     function column_default( $item, $column_name ) {
         switch( $column_name ) {
             case 'dm_amount':
-                return ($item['payment_method'] ? '<img valign="top" src="https://www.mollie.com/images/payscreen/methods/' . $item['payment_method'] . '.png" width="18"> ' : '') . dmm_get_currency_symbol($item['dm_currency']) . ' ' . number_format($item[ $column_name ], dmm_get_currencies($item['dm_currency']), ',', '') . ' ' . (isset($item['customer_id']) && $item['customer_id'] ? '<small>(recurring)</small>' : '');
-                break;
+                return ($item['payment_method'] ? '<img valign="top" src="https://www.mollie.com/images/payscreen/methods/' . $item['payment_method'] . '.png" width="18"> ' : '') . dmm_get_currency_symbol($item['dm_currency']) . ' ' . number_format($item[ $column_name ], dmm_get_currencies($item['dm_currency']), ',', '') . ' ' . (isset($item['subscription_id']) && !empty($item['subscription_id']) ? '<small>(recurring)</small>' : '');
             case 'time':
                 return date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($item[ $column_name ]));
             case 'dm_status':

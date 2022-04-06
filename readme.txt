@@ -3,8 +3,8 @@ Contributors: ndijkstra
 Donate link: https://wobbie.nl/doneren
 Tags: mollie,doneren,donate,ideal,mistercash,bancontact,creditcard,paypal,sofort,belfius,overboeking,recurring,incasso,debit,herhaalbetalingen,sepa,subscriptions,kbc,cbc,multicurrency,usd,gbp,dollar,pound
 Requires at least: 5.3
-Tested up to: 5.8.2
-Stable tag: 2.9.3
+Tested up to: 5.9.3
+Stable tag: 2.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,10 @@ Yes! The following shortcodes are available:
 1. You can also use the optional shortcode [doneren_met_mollie_total] to show the total raised money
 
 == Changelog ==
+
+= 2.9.4 - 06/04/2022 =
+* Fixed bug where all donations were marked as recurring
+* If subscription is already cancelled at Mollie, the plugin will now update the status when you are trying to cancel it
 
 = 2.9.3 - 08/12/2021 =
 * Also creating customers/donors for one-time payments

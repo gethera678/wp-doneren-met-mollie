@@ -490,7 +490,7 @@ class Dmm_Start
                     do_action('dmm_payment_created', $payment);
 
                     $this->wpdb->query($this->wpdb->prepare("INSERT INTO " . DMM_TABLE_DONATIONS . "
-                    ( `time`, payment_id, customer_id, donation_id, dm_status, dm_currency, dm_amount, dm_settlement_currency, dm_settlement_amount, dm_name, dm_email, dm_project, dm_company, dm_address, dm_zipcode, dm_city, dm_country, dm_message, dm_phone, payment_method, payment_mode )
+                    ( `time`, payment_id, customer_id, donation_id, dm_status, dm_currency, dm_amount, dm_settlement_currency, dm_settlement_amount, dm_name, dm_email, dm_project, dm_company, dm_address, dm_zipcode, dm_city, dm_country, dm_message, dm_phone, payment_method, payment_mode)
                     VALUES ( %s, %s, %s, %s, 'open', %s, %f, %s, %f, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )",
                             date('Y-m-d H:i:s'),
                             $payment->id,
@@ -828,9 +828,9 @@ class Dmm_Start
                             dmm_multicurrency_methods(document.getElementById('dmm_currency').value);
                         }
                     </script>
-                    <label for="dmm_permission_field" id="dmm_permission" style="display:none"><input type="checkbox"
-                                                                                                      id="dmm_permission_field"
-                                                                                                      name="dmm_permission"> <?php echo sprintf(__('I hereby authorize %s to collect the amount shown above from my account periodically.', 'doneren-met-mollie'), esc_html(get_option('dmm_name_foundation'))); ?>
+                    <label for="dmm_permission_field" id="dmm_permission" style="display:none">
+	                    <input type="checkbox" id="dmm_permission_field" name="dmm_permission">
+	                    <?php echo sprintf(__('I hereby authorize %s to collect the amount shown above from my account periodically.', 'doneren-met-mollie'), esc_html(get_option('dmm_name_foundation'))); ?>
                     </label>
 
                     <?php if (isset($dmm_fields['GDPR checkbox']['active']) &&
