@@ -2,7 +2,7 @@
 /*
 Plugin Name: Doneren met Mollie
 Description: Receive donations via Mollie
-Version: 2.9.4
+Version: 2.10.0
 Author: Wobbie.nl
 Author URI: https://wobbie.nl
 Text Domain: doneren-met-mollie
@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 
 // Plugin Version
 if (!defined('DMM_VERSION')) {
-    define('DMM_VERSION', '2.9.4');
+    define('DMM_VERSION', '2.10.0');
 }
 
 // Plugin Folder Path

@@ -163,6 +163,8 @@ class Dmm_Admin {
         register_setting('dmm-settings-form', 'dmm_fields_cls');
         register_setting('dmm-settings-form', 'dmm_button_cls');
         register_setting('dmm-settings-form', 'dmm_gdpr_link');
+        register_setting('dmm-settings-form', 'dmm_recaptcha_v3_site_key');
+        register_setting('dmm-settings-form', 'dmm_recaptcha_v3_secret_key');
     }
 
     /**
@@ -254,7 +256,7 @@ class Dmm_Admin {
                 <div class="alignleft actions">
                     <select name="action">
                         <option value="" selected='selected'>-------</option>
-                        <option value="delete"><?php esc_html_e('Delete selected donations') ?></option>
+                        <option value="delete"><?php esc_html_e('Delete selected donations', 'doneren-met-mollie') ?></option>
                     </select>
                     <input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']) ?>" />
                     <input type="submit" id="doaction" class="button action" value="Submit"  />
@@ -458,7 +460,7 @@ class Dmm_Admin {
                 <div class="alignleft actions">
                     <select name="action">
                         <option value="" selected='selected'>-------</option>
-                        <option value="delete"><?php esc_html_e('Delete selected donors') ?></option>
+                        <option value="delete"><?php esc_html_e('Delete selected donors', 'doneren-met-mollie') ?></option>
                     </select>
                     <input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']) ?>" />
                     <input type="submit" id="doaction" class="button action" value="Submit"  />
@@ -817,7 +819,32 @@ class Dmm_Admin {
                     </td>
                 </tr>
                 </tbody>
-            </table>
+            </table><hr>
+
+            <h3><?php esc_html_e('Google reCaptcha V3', 'doneren-met-mollie');?></h3>
+	        <small>
+		        <?php esc_html_e('Generate a reCAPTCHA v3 key at:', 'doneren-met-mollie');?> <a target="_blank" href="https://www.google.com/recaptcha/admin/create">Google</a>
+	        </small>
+            <table class="form-table">
+                <tbody>
+                <tr valign="top">
+                    <th scope="row" class="titledesc">
+                        <label><?php esc_html_e('Site key', 'doneren-met-mollie');?></label>
+                    </th>
+                    <td class="forminp">
+                        <input type="text" size="50" name="dmm_recaptcha_v3_site_key" value="<?php echo esc_attr(get_option('dmm_recaptcha_v3_site_key'));?>">
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row" class="titledesc">
+                        <label><?php esc_html_e('Secret key', 'doneren-met-mollie');?></label>
+                    </th>
+                    <td class="forminp">
+                        <input type="text" size="50" name="dmm_recaptcha_v3_secret_key" value="<?php echo esc_attr(get_option('dmm_recaptcha_v3_secret_key'));?>">
+                    </td>
+                </tr>
+                </tbody>
+            </table><hr>
 
             <h3><?php esc_html_e('Classes', 'doneren-met-mollie');?></h3>
             <table class="form-table">

@@ -1,6 +1,7 @@
 <?php
 
 use DonerenMetMollie\MollieApi;
+use MollieForms\Exception;
 
 class Dmm_Start
 {
@@ -335,6 +336,22 @@ class Dmm_Start
                 // Hook to validate custom fields
                 $errors = apply_filters('dmm_donate_form_validation', $errors);
 
+				if (empty($errors) && $recaptchaSecretKey = get_option('dmm_recaptcha_v3_secret_key')) {
+					$response = wp_remote_request(
+							"https://www.google.com/recaptcha/api/siteverify?secret=" . $recaptchaSecretKey . "&response=" . $_POST['dmm_token'],
+							[
+								'method'     => 'GET',
+								'timeout'    => 45,
+								'blocking'   => true,
+							]
+					);
+					$response = json_decode($response['body']);
+
+					if ($response->success === false || $response->score <= 0.5) {
+						$errors[] = __('It looks like you are trying to spam', 'doneren-met-mollie');
+					}
+				}
+
                 if (!empty($errors)) {
                     echo '<ul>';
                     foreach ($errors as $error) {
@@ -557,11 +574,26 @@ class Dmm_Start
 
                 $selected_interval = isset($_POST['dmm_recurring_interval']) ?
                         sanitize_text_field($_POST['dmm_recurring_interval']) : get_option('dmm_default_interval');
-                ?>
-                <form action="<?php echo esc_attr($_SERVER['REQUEST_URI']); ?>"
-                      class="<?php echo esc_attr(get_option('dmm_form_cls')); ?>"
-                      method="post">
 
+				if ($siteKey = get_option('dmm_recaptcha_v3_site_key')) {
+					?>
+					<script src="https://www.google.com/recaptcha/api.js?render=<?php echo esc_attr($siteKey);?>"></script>
+					<script>
+						function onSubmitDmm(e) {
+							e.preventDefault();
+							grecaptcha.ready(function() {
+								grecaptcha.execute("<?php echo esc_attr($siteKey);?>", {action: "submit"}).then(function(token) {
+									document.getElementById("dmm_token").value = token;
+									document.getElementById("dmm_form").submit();
+								});
+							});
+						}
+					</script>
+					<?php
+				}
+                ?>
+                <form id="dmm_form" action="<?php echo esc_attr($_SERVER['REQUEST_URI']); ?>"
+                      class="<?php echo esc_attr(get_option('dmm_form_cls')); ?>" method="post">
                     <?php
                     // Hook to add custom form fields on top of the form
                     do_action('dmm_donate_form_top'); ?>
@@ -850,10 +882,18 @@ class Dmm_Start
                     // Hook to add custom form fields at the bottom of the form
                     do_action('dmm_donate_form_bottom'); ?>
 
-                    <input type="submit"
-                           name="dmm_submitted"
-                           class="<?php echo esc_attr(get_option('dmm_button_cls')); ?>"
-                           value="<?php echo esc_attr(__('Donate', 'doneren-met-mollie')); ?>">
+	                <?php if (get_option('dmm_recaptcha_v3_site_key')) { ?>
+		                <input type="hidden" id="dmm_token" name="dmm_token" value="">
+		                <input type="hidden" name="dmm_submitted" value="1">
+		                <input type="button" class="<?php echo esc_attr(get_option('dmm_button_cls')); ?>"
+		                       onclick="onSubmitDmm(event)" data-action="submit"
+		                       value="<?php echo esc_attr(__('Donate', 'doneren-met-mollie')); ?>">
+	                <?php } else { ?>
+		                <input type="submit"
+		                       name="dmm_submitted"
+		                       class="<?php echo esc_attr(get_option('dmm_button_cls')); ?>"
+		                       value="<?php echo esc_attr(__('Donate', 'doneren-met-mollie')); ?>">
+	                <?php } ?>
 
                 </form>
                 <?php

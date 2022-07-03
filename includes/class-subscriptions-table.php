@@ -10,7 +10,7 @@ class Dmm_Subscriptions_Table extends WP_List_Table
         $columns['sub_amount'] = __('Amount', 'doneren-met-mollie');
         $columns['sub_interval'] = __('Interval', 'doneren-met-mollie');
         $columns['sub_status'] = __('Status', 'doneren-met-mollie');
-
+        $columns['total_donated'] = __('Total donated', 'doneren-met-mollie');
         $columns['subscription_id'] = __('Subscription ID', 'doneren-met-mollie');
 
         return $columns;
@@ -105,6 +105,8 @@ class Dmm_Subscriptions_Table extends WP_List_Table
 
     function column_default($item, $column_name)
     {
+		global $wpdb;
+
         switch($column_name) {
             case 'created_at':
                 return date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($item[ $column_name ]));
@@ -117,6 +119,15 @@ class Dmm_Subscriptions_Table extends WP_List_Table
 
             case 'sub_status':
                 return $this->getStatus($item['sub_status']);
+
+	        case 'total_donated':
+		        $currency = $wpdb->get_var("SELECT dm_settlement_currency FROM " . DMM_TABLE_DONATIONS . " WHERE customer_id='" . esc_sql($item['customer_id']) . "' AND dm_status='paid'");
+		        $total = $wpdb->get_var("SELECT SUM(dm_settlement_amount) FROM " . DMM_TABLE_DONATIONS . " WHERE customer_id='" . esc_sql($item['customer_id']) . "' AND dm_status='paid'");
+		        if (!$total) {
+			        return '';
+		        }
+
+		        return dmm_get_currency_symbol($currency) . ' ' . number_format_i18n($total, 2);
 
             default:
                 return $item[$column_name];

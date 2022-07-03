@@ -17,8 +17,10 @@ class Dmm_Donors_Table extends WP_List_Table
         $columns['cb'] = '<input type="checkbox">';
         $columns['customer_name'] = __('Name', 'doneren-met-mollie');
         $columns['customer_email'] = __('Email address', 'doneren-met-mollie');
+        $columns['total_donated'] = __('Total donated', 'doneren-met-mollie');
 
-        $columns['customer_id'] = __('Customer ID', 'doneren-met-mollie');
+        $columns['customer_id'] = 'Mollie ' . __('Customer ID', 'doneren-met-mollie');
+        $columns['customer_mode'] = __('Mode', 'doneren-met-mollie');
 
         return $columns;
     }
@@ -93,7 +95,17 @@ class Dmm_Donors_Table extends WP_List_Table
     }
 
     function column_default( $item, $column_name ) {
+	    global $wpdb;
+
         switch( $column_name ) {
+			case 'total_donated':
+				$currency = $wpdb->get_var("SELECT dm_settlement_currency FROM " . DMM_TABLE_DONATIONS . " WHERE customer_id='" . esc_sql($item['customer_id']) . "' AND dm_status='paid'");
+				$total = $wpdb->get_var("SELECT SUM(dm_settlement_amount) FROM " . DMM_TABLE_DONATIONS . " WHERE customer_id='" . esc_sql($item['customer_id']) . "' AND dm_status='paid'");
+                if (!$total) {
+					return '';
+                }
+
+				return dmm_get_currency_symbol($currency) . ' ' . number_format_i18n($total, 2);
             default:
                 return $item[ $column_name ];
         }

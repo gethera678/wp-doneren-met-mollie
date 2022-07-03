@@ -3,8 +3,8 @@ Contributors: ndijkstra
 Donate link: https://wobbie.nl/doneren
 Tags: mollie,doneren,donate,ideal,mistercash,bancontact,creditcard,paypal,sofort,belfius,overboeking,recurring,incasso,debit,herhaalbetalingen,sepa,subscriptions,kbc,cbc,multicurrency,usd,gbp,dollar,pound
 Requires at least: 5.3
-Tested up to: 5.9.3
-Stable tag: 2.9.4
+Tested up to: 6.0
+Stable tag: 2.10.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,10 @@ Yes! The following shortcodes are available:
 1. You can also use the optional shortcode [doneren_met_mollie_total] to show the total raised money
 
 == Changelog ==
+
+= 2.10.0 - 03/07/2022 =
+* Added Google reCaptcha V3 integration
+* Added total donated amount to donors and subscriptions table
 
 = 2.9.4 - 06/04/2022 =
 * Fixed bug where all donations were marked as recurring
