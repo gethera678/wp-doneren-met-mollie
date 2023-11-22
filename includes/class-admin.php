@@ -338,6 +338,12 @@ class Dmm_Admin {
     public function dmm_page_donation()
     {
         $donation = $this->wpdb->get_row("SELECT * FROM " . DMM_TABLE_DONATIONS . " WHERE id = '" . esc_sql($_REQUEST['id']) . "'");
+        $donor    = $this->wpdb->get_row("SELECT * FROM " . DMM_TABLE_DONORS . " WHERE customer_id = '" . esc_sql($donation->customer_id) . "'");
+
+	    $subscriptions = [];
+        if ($donor) {
+	        $subscriptions = $this->wpdb->get_results("SELECT * FROM " . DMM_TABLE_SUBSCRIPTIONS . " WHERE customer_id='" . esc_sql($donor->id) . "'", ARRAY_A);
+        }
         ?>
         <div class="wrap">
             <h2><?php esc_html_e('Donation', 'doneren-met-mollie') ?></h2>
@@ -403,11 +409,6 @@ class Dmm_Admin {
                     </tr>
                     <tr>
                         <th class="column-empty"></th>
-                        <th class="column-a" scope="row"><strong><?php esc_html_e('Recurring payment', 'doneren-met-mollie');?></strong></th>
-                        <td class="column-b"><?php echo esc_html($donation->customer_id ? __('Yes', 'doneren-met-mollie') : __('No', 'doneren-met-mollie'));?></td>
-                    </tr>
-                    <tr>
-                        <th class="column-empty"></th>
                         <th class="column-a" scope="row"><strong><?php esc_html_e('Payment status', 'doneren-met-mollie');?></strong></th>
                         <td class="column-b"><?php echo esc_html($donation->dm_status);?></td>
                     </tr>
@@ -421,8 +422,70 @@ class Dmm_Admin {
                         <th class="column-a" scope="row"><strong><?php esc_html_e('Payment ID', 'doneren-met-mollie');?></strong></th>
                         <td class="column-b"><?php echo esc_html($donation->payment_id);?></td>
                     </tr>
+                    <tr>
+                        <th class="column-empty"></th>
+                        <th class="column-a" scope="row"><strong><?php esc_html_e('Customer ID', 'doneren-met-mollie');?></strong></th>
+                        <td class="column-b"><?php echo esc_html($donation->customer_id);?></td>
+                    </tr>
                 </tbody>
             </table>
+            <?php if (count($subscriptions) > 0) { $subs = new Dmm_Subscriptions_Table(); ?>
+                <br>
+                <h2><?php esc_html_e('Subscriptions', 'doneren-met-mollie') ?></h2>
+
+                <?php foreach($subscriptions as $subscription) {
+		            $url_cancel = wp_nonce_url('?page=' . DMM_PAGE_SUBSCRIPTIONS . '&action=cancel&subscription=' . $subscription['subscription_id'] . '&customer=' . $subscription['customer_id'], 'cancel-subscription_' . $subscription['subscription_id']); ?>
+                    <table class="widefat fixed striped">
+                        <thead>
+                        <tr valign="top">
+                            <th id="empty" class="manage-column column-empty" style="width:5px;">&nbsp;</th>
+                            <th id="a" class="manage-column column-a" style="width: 200px;"></th>
+                            <th id="b" class="manage-column column-b" style="text-align: right">
+					            <?php echo sprintf('<a href="%s" style="color:#a00;" onclick="return confirm(\'' . __('Are you sure?', 'doneren-met-mollie') . '\')">' . esc_html__('Cancel', 'doneren-met-mollie') . '</a>', $url_cancel);?>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th class="column-empty"></th>
+                            <th class="column-a" scope="row"><strong><?php esc_html_e('Payment description', 'doneren-met-mollie');?></strong></th>
+                            <td class="column-b"><?php echo esc_html($subscription['sub_description']);?></td>
+                        </tr>
+                        <tr>
+                            <th class="column-empty"></th>
+                            <th class="column-a" scope="row"><strong><?php esc_html_e('Amount', 'doneren-met-mollie');?></strong></th>
+                            <td class="column-b"><?php echo dmm_get_currency_symbol($subscription['sub_currency']) . ' ' . number_format($subscription['sub_amount'], dmm_get_currencies($subscription['sub_currency']), ',', '');?></td>
+                        </tr>
+                        <tr>
+                            <th class="column-empty"></th>
+                            <th class="column-a" scope="row"><strong><?php esc_html_e('Interval', 'doneren-met-mollie');?></strong></th>
+                            <td class="column-b"><?php echo esc_html($subs->getInterval($subscription['sub_interval']));?></td>
+                        </tr>
+                        <tr>
+                            <th class="column-empty"></th>
+                            <th class="column-a" scope="row"><strong><?php esc_html_e('Times', 'doneren-met-mollie');?></strong></th>
+                            <td class="column-b"><?php echo esc_html($subscription['sub_times'] ?: esc_html_e('Infinite', 'doneren-met-mollie'));?></td>
+                        </tr>
+                        <tr>
+                            <th class="column-empty"></th>
+                            <th class="column-a" scope="row"><strong><?php esc_html_e('Payment method', 'doneren-met-mollie');?></strong></th>
+                            <td class="column-b"><?php echo esc_html($subscription['sub_method']);?></td>
+                        </tr>
+                        <tr>
+                            <th class="column-empty"></th>
+                            <th class="column-a" scope="row"><strong><?php esc_html_e('Status', 'doneren-met-mollie');?></strong></th>
+                            <td class="column-b"><?php echo esc_html($subs->getStatus($subscription['sub_status']));?></td>
+                        </tr>
+                        <tr>
+                            <th class="column-empty"></th>
+                            <th class="column-a" scope="row"><strong><?php esc_html_e('Subscription ID', 'doneren-met-mollie');?></strong></th>
+                            <td class="column-b"><?php echo esc_html($subscription['subscription_id']);?></td>
+                        </tr>
+                        </tbody>
+                    </table><br>
+                <?php } ?>
+
+            <?php } ?>
         </div>
         <?php
     }
