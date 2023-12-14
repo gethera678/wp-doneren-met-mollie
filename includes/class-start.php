@@ -490,7 +490,7 @@ class Dmm_Start
                                 'sequenceType' => 'first',
                                 "description"  => $description,
                                 "redirectUrl"  => $redirectBaseUrl . '?dmm_id=' . $donation_id,
-//                                "webhookUrl"   => $dmm_webhook . 'first/' . $this->wpdb->insert_id . '/secret/' . $secret,
+                                "webhookUrl"   => $dmm_webhook . 'first/' . $this->wpdb->insert_id . '/secret/' . $secret,
                                 "method"       => sanitize_text_field($_POST['dmm_method']),
                                 "metadata"     => $metadata,
                         ]);
