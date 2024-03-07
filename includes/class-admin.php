@@ -245,7 +245,7 @@ class Dmm_Admin {
                 <input type="hidden" name="page" value="<?php echo DMM_PAGE_DONATIONS;?>">
 
                 <?php if (current_user_can('export')): ?>
-                    <a href="<?php echo admin_url('admin-post.php?action=dmm_export' . (isset($_GET['subscription']) ? '&subscription=' . sanitize_text_field($_GET['subscription']) : '') . (isset($_GET['search']) ? '&search=' . $_GET['search'] : ''));?>"><?php esc_html_e('Export', 'doneren-met-mollie') ?></a>
+                    <a href="<?php echo admin_url('admin-post.php?action=dmm_export' . (isset($_GET['subscription']) ? '&subscription=' . esc_url($_GET['subscription']) : '') . (isset($_GET['search']) ? '&search=' . esc_url($_GET['search']) : ''));?>"><?php esc_html_e('Export', 'doneren-met-mollie') ?></a>
                 <?php endif ?>
 
                 <input type="text" name="search" value="<?php echo esc_attr(isset($_GET['search']) ? $_GET['search'] : '');?>" placeholder="<?php esc_html_e('Search') ?>">

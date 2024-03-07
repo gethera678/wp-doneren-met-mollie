@@ -996,7 +996,7 @@ class Dmm_Start
                             '"><input type="radio" name="dmm_method" value="' . esc_attr($method->id) . '" ' .
                             ($first ? 'checked' : '') .
                             '> <img style="vertical-align:middle;display:inline-block" src="' .
-                            sanitize_text_field($method->image->size1x) . '"> ' .
+                            esc_attr($method->image->size1x) . '"> ' .
                             esc_html__($method->description, 'doneren-met-mollie') . '<br></label>';
                 $first   = false;
             }
@@ -1014,7 +1014,7 @@ class Dmm_Start
                             '"><input type="radio" name="dmm_method" value="' . esc_attr($method->id) . '" ' .
                             ($first ? 'checked' : '') .
                             '> <img style="vertical-align:middle;display:inline-block" src="' .
-                            sanitize_text_field($method->image->size1x) . '"></label> ';
+                            esc_attr($method->image->size1x) . '"></label> ';
                 $first   = false;
             }
         } elseif ($option === 'dropdown') {
