@@ -1,10 +1,10 @@
-=== Plugin Name ===
+=== Doneren met Mollie ===
 Contributors: ndijkstra
 Donate link: https://wobbie.nl/doneren
-Tags: mollie,doneren,donate,ideal,mistercash,bancontact,creditcard,paypal,sofort,belfius,overboeking,recurring,incasso,debit,herhaalbetalingen,sepa,subscriptions,kbc,cbc,multicurrency,usd,gbp,dollar,pound
+Tags: mollie,doneren,donate,ideal,recurring
 Requires at least: 5.3
 Tested up to: 6.4.3
-Stable tag: 2.10.3
+Stable tag: 2.10.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,9 @@ Yes! The following shortcodes are available:
 1. You can also use the optional shortcode [doneren_met_mollie_total] to show the total raised money
 
 == Changelog ==
+
+= 2.10.4 - 12/03/2024 =
+* Update readme
 
 = 2.10.3 - 07/03/2024 =
 * Security fix
