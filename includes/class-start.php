@@ -327,9 +327,7 @@ class Dmm_Start
 
                 if (empty($_POST['dmm_amount'])) {
                     $errors[] = __('Please choose an amount', 'doneren-met-mollie');
-                }
-
-                if ($_POST['dmm_amount'] < (float) get_option('dmm_minimum_amount', 1)) {
+                } elseif ($_POST['dmm_amount'] < (float) get_option('dmm_minimum_amount', 1)) {
                     $errors[] = __('The amount is too low, please choose a higher amount', 'doneren-met-mollie');
                 }
 
