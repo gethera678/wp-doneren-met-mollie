@@ -15,7 +15,7 @@ class Dmm_Start
         global $wpdb;
         $this->wpdb = $wpdb;
 
-        add_action('init', [$this, 'dmm_do_output_buffer']);
+        add_action('init', [$this, 'dmm_init_plugin']);
         add_filter('plugin_action_links_' . DMM_PLUGIN_BASE, [$this, 'dmm_settings_links']);
         add_shortcode('doneren_met_mollie', [$this, 'dmm_donate_form']);
         add_shortcode('doneren_met_mollie_total', [$this, 'dmm_donate_total']);
@@ -150,8 +150,9 @@ class Dmm_Start
      *
      * @since 1.0.0
      */
-    public function dmm_do_output_buffer()
+    public function dmm_init_plugin()
     {
+	    load_plugin_textdomain('doneren-met-mollie');
         ob_start();
     }
 

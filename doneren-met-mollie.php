@@ -2,7 +2,7 @@
 /*
 Plugin Name: Doneren met Mollie
 Description: Receive donations via Mollie
-Version: 2.10.5
+Version: 2.10.6
 Author: Wobbie.nl
 Author URI: https://wobbie.nl
 Text Domain: doneren-met-mollie
@@ -61,5 +61,3 @@ function dmm_uninstall_database()
 // Update database when plugin is updated
 if (get_option('dmm_version') != DMM_VERSION)
     $dmm->dmm_install_database();
-
-load_plugin_textdomain('doneren-met-mollie');
