@@ -102,7 +102,7 @@ class MollieApi {
             'timeout'       => 45,
             'blocking'      => true,
             'headers'       => array('Authorization' => 'Bearer ' . $this->apiKey),
-            'user-agent'    => 'PHP/' . phpversion() . ' Wordpress/' . get_bloginfo('version') . ' DonerenMetMollie/' . get_option('dmm_version'),
+            'user-agent'    => 'PHP/' . phpversion() . ' Wordpress/' . get_bloginfo('version') . ' DonerenMetMollie/' . get_option('dmm_version') . ' uap/Ukh8zvBgPknSPdh8',
             'body'          => $body
         );
 
