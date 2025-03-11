@@ -217,13 +217,13 @@ class Dmm_Start
     {
         $atts = shortcode_atts([
                 'goal' => '',
-                'text' => __('Goal reached!', 'doneren-met-mollie'),
+                'text' => esc_html__('Goal reached!', 'doneren-met-mollie'),
         ], $atts);
 
         ob_start();
 
         if ($atts['goal'] < 0) {
-            echo __('Goal must be higher then 0', 'doneren-met-mollie');
+            echo esc_html__('Goal must be higher then 0', 'doneren-met-mollie');
         } else {
             $sum = $this->wpdb->get_var("SELECT SUM(dm_settlement_amount) FROM " . DMM_TABLE_DONATIONS .
                                         " WHERE dm_status='paid' AND payment_mode='live'");
@@ -231,7 +231,7 @@ class Dmm_Start
             $goal = (int) $atts['goal'] - $sum;
 
             if ($goal <= 0) {
-                echo __($atts['text'], 'doneren-met-mollie');
+                echo esc_html__($atts['text'], 'doneren-met-mollie');
             } else {
                 echo '&euro; ' . number_format($goal, 2, ',', '');
             }
