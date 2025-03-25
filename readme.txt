@@ -4,7 +4,7 @@ Donate link: https://wobbie.nl/doneren
 Tags: mollie,doneren,donate,ideal,recurring
 Requires at least: 5.3
 Tested up to: 6.7
-Stable tag: 2.10.8
+Stable tag: 2.10.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,10 @@ Yes! The following shortcodes are available:
 1. You can also use the optional shortcode [doneren_met_mollie_total] to show the total raised money
 
 == Changelog ==
+
+= 2.10.9 - 25/03/2025 =
+* Move variable translations out of constructor to get rid of notice about translation loading
+* Fixed error about settlementAmount when using Test API-key
 
 = 2.10.8 - 11/03/2025 =
 * XSS vulnerability fix for goal shortcode

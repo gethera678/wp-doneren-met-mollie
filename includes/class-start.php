@@ -21,23 +21,6 @@ class Dmm_Start
         add_shortcode('doneren_met_mollie_total', [$this, 'dmm_donate_total']);
         add_shortcode('doneren_met_mollie_donors', [$this, 'dmm_donate_donors']);
         add_shortcode('doneren_met_mollie_goal', [$this, 'dmm_donate_goal']);
-
-        // Variable translations
-        __('iDEAL', 'doneren-met-mollie');
-        __('Creditcard', 'doneren-met-mollie');
-        __('Credit card', 'doneren-met-mollie');
-        __('Bancontact', 'doneren-met-mollie');
-        __('SOFORT Banking', 'doneren-met-mollie');
-        __('Bank transfer', 'doneren-met-mollie');
-        __('SEPA Direct Debit', 'doneren-met-mollie');
-        __('Belfius Pay Button', 'doneren-met-mollie');
-        __('PayPal', 'doneren-met-mollie');
-        __('Bitcoin', 'doneren-met-mollie');
-        __('Gift cards', 'doneren-met-mollie');
-        __('Paysafecard', 'doneren-met-mollie');
-        __('ING Home\'Pay', 'doneren-met-mollie');
-        __('KBC/CBC Payment Button', 'doneren-met-mollie');
-        __('Przelewy24', 'doneren-met-mollie');
     }
 
     /**
@@ -153,6 +136,25 @@ class Dmm_Start
     public function dmm_init_plugin()
     {
 	    load_plugin_textdomain('doneren-met-mollie');
+
+	    // Variable translations
+	    __('iDEAL', 'doneren-met-mollie');
+	    __('Creditcard', 'doneren-met-mollie');
+	    __('Credit card', 'doneren-met-mollie');
+	    __('Bancontact', 'doneren-met-mollie');
+	    __('SOFORT Banking', 'doneren-met-mollie');
+	    __('Bank transfer', 'doneren-met-mollie');
+	    __('SEPA Direct Debit', 'doneren-met-mollie');
+	    __('Belfius Pay Button', 'doneren-met-mollie');
+	    __('PayPal', 'doneren-met-mollie');
+	    __('Bitcoin', 'doneren-met-mollie');
+	    __('Gift cards', 'doneren-met-mollie');
+	    __('Paysafecard', 'doneren-met-mollie');
+	    __('ING Home\'Pay', 'doneren-met-mollie');
+	    __('KBC/CBC Payment Button', 'doneren-met-mollie');
+	    __('Przelewy24', 'doneren-met-mollie');
+	    __('Klarna', 'doneren-met-mollie');
+
         ob_start();
     }
 
@@ -414,30 +416,16 @@ class Dmm_Start
                     $metadata = null;
                     if (get_option('dmm_metadata') != '0') {
                         $metadata = [
-                                "name"        => isset($_POST['dmm_name']) ? sanitize_text_field($_POST['dmm_name']) :
-                                        '',
+                                "name"        => isset($_POST['dmm_name']) ? sanitize_text_field($_POST['dmm_name']) : '',
                                 "email"       => isset($_POST['dmm_email']) ? sanitize_email($_POST['dmm_email']) : '',
-                                "project"     => isset($_POST['dmm_project']) ?
-                                        sanitize_text_field($_POST['dmm_project']) :
-                                        '',
-                                "company"     => isset($_POST['dmm_company']) ?
-                                        sanitize_text_field($_POST['dmm_company']) :
-                                        '',
-                                "address"     => isset($_POST['dmm_address']) ?
-                                        sanitize_text_field($_POST['dmm_address']) :
-                                        '',
-                                "zipcode"     => isset($_POST['dmm_zipcode']) ?
-                                        sanitize_text_field($_POST['dmm_zipcode']) :
-                                        '',
-                                "city"        => isset($_POST['dmm_city']) ? sanitize_text_field($_POST['dmm_city']) :
-                                        '',
-                                "country"     => isset($_POST['dmm_country']) ?
-                                        sanitize_text_field($_POST['dmm_country']) :
-                                        '',
-                                "message"     => isset($_POST['dmm_message']) ?
-                                        sanitize_textarea_field($_POST['dmm_message']) : '',
-                                "phone"       => isset($_POST['dmm_phone']) ? sanitize_text_field($_POST['dmm_phone']) :
-                                        '',
+                                "project"     => isset($_POST['dmm_project']) ? sanitize_text_field($_POST['dmm_project']) : '',
+                                "company"     => isset($_POST['dmm_company']) ? sanitize_text_field($_POST['dmm_company']) : '',
+                                "address"     => isset($_POST['dmm_address']) ? sanitize_text_field($_POST['dmm_address']) : '',
+                                "zipcode"     => isset($_POST['dmm_zipcode']) ? sanitize_text_field($_POST['dmm_zipcode']) : '',
+                                "city"        => isset($_POST['dmm_city']) ? sanitize_text_field($_POST['dmm_city']) : '',
+                                "country"     => isset($_POST['dmm_country']) ? sanitize_text_field($_POST['dmm_country']) : '',
+                                "message"     => isset($_POST['dmm_message']) ? sanitize_textarea_field($_POST['dmm_message']) : '',
+                                "phone"       => isset($_POST['dmm_phone']) ? sanitize_text_field($_POST['dmm_phone']) : '',
                                 "donation_id" => $donation_id,
                         ];
                     }
@@ -495,12 +483,13 @@ class Dmm_Start
                         ]);
                     }
 
-                    $this->wpdb->query($this->wpdb->prepare("UPDATE " . DMM_TABLE_DONORS .
-                                                            " SET sub_settlement_currency = %s, sub_settlement_amount = %s WHERE secret = %s",
-                            $payment->settlementAmount->currency,
-                            $payment->settlementAmount->value,
-                            $secret
-                    ));
+                    if (isset($payment->settlementAmount)) {
+	                    $this->wpdb->query($this->wpdb->prepare("UPDATE " . DMM_TABLE_DONORS . " SET sub_settlement_currency = %s, sub_settlement_amount = %s WHERE secret = %s",
+		                    $payment->settlementAmount->currency,
+		                    $payment->settlementAmount->value,
+		                    $secret
+	                    ));
+                    }
 
                     do_action('dmm_payment_created', $payment);
 
@@ -513,8 +502,8 @@ class Dmm_Start
                             $donation_id,
                             $payment->amount->currency,
                             $payment->amount->value,
-                            $payment->settlementAmount->currency ?: $payment->amount->currency,
-                            $payment->settlementAmount->value ?: $payment->amount->value,
+                            isset($payment->settlementAmount) ? $payment->settlementAmount->currency : $payment->amount->currency,
+	                        isset($payment->settlementAmount) ? $payment->settlementAmount->value : $payment->amount->value,
                             isset($_POST['dmm_name']) ? sanitize_text_field($_POST['dmm_name']) : null,
                             isset($_POST['dmm_email']) ? sanitize_email($_POST['dmm_email']) : null,
                             isset($_POST['dmm_project']) ? sanitize_text_field($_POST['dmm_project']) : null,
@@ -537,8 +526,7 @@ class Dmm_Start
 
             // Return page
             if (isset($_GET['dmm_id'])) {
-                $donation = $this->wpdb->get_row("SELECT * FROM " . DMM_TABLE_DONATIONS . " WHERE donation_id = '" .
-                                                 esc_sql($_GET['dmm_id']) . "'");
+                $donation = $this->wpdb->get_row("SELECT * FROM " . DMM_TABLE_DONATIONS . " WHERE donation_id = '" . esc_sql($_GET['dmm_id']) . "'");
                 $payment  = $mollie->get('payments/' . $donation->payment_id);
 
                 if (isset($payment->paidAt) && $payment->paidAt) {
