@@ -1083,7 +1083,7 @@ class Dmm_Start
      */
     private function dmm_projects($selected = '')
     {
-        $projects = explaode(PHP_EOL, sanitize_textarea_field(get_option('dmm_projects')));
+        $projects = explode(PHP_EOL, sanitize_textarea_field(get_option('dmm_projects')));
 
         $projectList = '<select style="width: 100%" id="dmm_project" name="dmm_project" class="' .
                        esc_attr(get_option('dmm_fields_cls')) . '">';
