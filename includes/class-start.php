@@ -245,13 +245,14 @@ class Dmm_Start
 
     /**
      * Donation form
-     *
+     * 
+     * @param  $atts
      * @return string
      * @throws \Mollie\Api\Exceptions\ApiException
      * @throws \Mollie\Api\Exceptions\IncompatiblePlatform
      * @since 1.0.0
      */
-    public function dmm_donate_form($atts)
+    public function dmm_donate_form($atts = null)
     {
         ob_start();
 
