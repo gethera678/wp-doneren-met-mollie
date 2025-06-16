@@ -251,7 +251,7 @@ class Dmm_Start
      * @throws \Mollie\Api\Exceptions\IncompatiblePlatform
      * @since 1.0.0
      */
-    public function dmm_donate_form()
+    public function dmm_donate_form($atts)
     {
         ob_start();
 
@@ -745,9 +745,19 @@ class Dmm_Start
                                                                  $dmm_fields['Project']['required'] ?
                                                                         '<span style="color:red;">*</span>' :
                                                                         ''); ?></label>
-                            <?php echo $this->dmm_projects(isset($_POST["dmm_project"]) ?
-                                    sanitize_text_field($_POST["dmm_project"]) : ''); ?>
-                        </p>
+
+						<?php
+            					if (isset($_POST["dmm_project"]) ) {
+            						$selected_project = $_POST["dmm_project"];
+            					} elseif (isset($atts) && is_array($atts) && key_exists("selected_project", $atts)) {
+            						$selected_project = $atts["selected_project"];
+            					} else {
+            						$selected_project = "";
+            					}
+                            ?>
+                            <?php echo $this->dmm_projects($selected_project); ?>
+
+                         </p>
                     <?php } ?>
 
                     <?php if (isset($dmm_fields['Message']['active']) && $dmm_fields['Message']['active']) { ?>
@@ -1073,12 +1083,12 @@ class Dmm_Start
      */
     private function dmm_projects($selected = '')
     {
-        $projects = explode(PHP_EOL, sanitize_textarea_field(get_option('dmm_projects')));
+        $projects = explaode(PHP_EOL, sanitize_textarea_field(get_option('dmm_projects')));
 
         $projectList = '<select style="width: 100%" id="dmm_project" name="dmm_project" class="' .
                        esc_attr(get_option('dmm_fields_cls')) . '">';
         foreach ($projects as $project) {
-            $projectList .= '<option' . ($selected === $project ? ' selected' : '') . '>' . esc_attr($project) .
+            $projectList .= '<option' . (trim($selected) === trim($project) ? ' selected' : '') . '>' . esc_attr($project) .
                             '</option>';
         }
         $projectList .= '</select>';
